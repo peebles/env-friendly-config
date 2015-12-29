@@ -1,0 +1,14 @@
+{
+  "name": "env-friendly-config",
+  "version": "1.0.0",
+  "description": "Environment Friendly Config Files",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Andrew Peebles",
+  "license": "ISC",
+  "dependencies": {
+    "lodash": "^3.10.1"
+  }
+}

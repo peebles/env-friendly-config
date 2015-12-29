@@ -1,0 +1,17 @@
+{
+    "default": {
+	"logger": {
+	    "level": "ENV:X_LEVEL:info"
+	},
+	"things": [
+	    { "foo": "ENV:X_FOO:bar" }
+	]
+    },
+    "staging": {
+	"logger": "REF:default.logger",
+	"things": [
+	    { "foop": "barp" },
+	    "REF:default.things[0]"
+	]
+    }
+}
