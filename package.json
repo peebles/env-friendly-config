@@ -1,10 +1,14 @@
 {
   "name": "env-friendly-config",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Environment Friendly Config Files",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "t/t1.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peebles/env-friendly-config"
   },
   "author": "Andrew Peebles",
   "license": "ISC",
