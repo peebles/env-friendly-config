@@ -19,34 +19,42 @@ module.exports = function( filename ) {
 	else if ( v == 'null' ) v = null;
 	return v;
     }
-    function resolveRef( val ) {
+    function resolveRef( val, p ) {
 	if ( ! val.toString().match( /^REF:/ ) ) return val;
 	var path = val.split(':')[1];
-	return _.get( json, path );
+	if ( _.has( json, path ) ) return _.get( json, path );
+	var clone = p.slice(0);
+	while( clone.length ) {
+	    if ( _.has( json, clone.join('.') + '.' + path ) ) {
+		return _.get( json, clone.join('.') + '.' + path );
+	    }
+	    clone.pop();
+	}
+	return null;
     }
-    function walkArray( a, fcn ) {
+    function walkArray( a, p, fcn ) {
 	a.forEach( function( v, index ) {
 	    if ( v instanceof Array ) {
-		walkArray( v, fcn );
+		walkArray( v, p, fcn );
 	    }
 	    else if ( v instanceof Object ) {
-		walk( v, fcn );
+		walk( v, p, fcn );
 	    }
 	    else {
-		a[ index ] = fcn( v );
+		a[ index ] = fcn( v, p );
 	    }
 	});
     }
-    function walk( o, fcn ) {
+    function walk( o, p, fcn ) {
 	_.forIn( o, function( v, k ) {
 	    if ( v instanceof Array ) {
-		walkArray( v, fcn );
+		walkArray( v, p.concat( k ), fcn );
 	    }
 	    else if ( v instanceof Object ) {
-		walk( v, fcn );
+		walk( v, p.concat( k ), fcn );
 	    }
 	    else {
-		o[ k ] = fcn( v );
+		o[ k ] = fcn( v, p );
 	    }
 	});
     }
@@ -70,8 +78,8 @@ module.exports = function( filename ) {
 	    }
 	});
     }
-    walk( json, resolveEnv );
-    walk( json, resolveRef );
+    walk( json, [], resolveEnv );
+    walk( json, [], resolveRef );
     inherit( json );
     return json;
 };

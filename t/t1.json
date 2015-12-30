@@ -1,5 +1,8 @@
 {
     "default": {
+	"redis": {
+	    "host": "redis"
+	},
 	"logger": {
 	    "level": "ENV:X_LEVEL:info"
 	},
@@ -9,11 +12,15 @@
 	"sp": {
 	    "type": "memory",
 	    "connection": {
-		"host": "localhost"
+		"host": "localhost",
+		"options": "REF:redis"
 	    }
 	}
     },
     "staging": {
+	"redis": {
+	    "host": "aws:redis"
+	},
 	"logger": "REF:default.logger",
 	"things": [
 	    { "foop": "barp" },
@@ -22,7 +29,8 @@
 	"INHERIT:sp:default.sp": {
 	    "connection": {
 		"host": "10.10.10.10",
-		"port": 40
+		"port": 40,
+		"options": "REF:redis"
 	    }
 	}
     }
