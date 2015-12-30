@@ -1,4 +1,4 @@
-# Simple, Environment Friendly Config With Section Substitution
+# Simple, Environment Friendly Config With Section Substitution and Inheritance
 
 Example `config.json`:
 
@@ -9,17 +9,29 @@ Example `config.json`:
             },
             "things": [
                 { "foo": "ENV:X_FOO:bar" }
-            ]
+            ],
+            "sp": {
+                "type": "memory",
+                "connection": {
+                    "host": "localhost"
+                }
+            }
         },
         "staging": {
             "logger": "REF:default.logger",
             "things": [
                 { "foop": "barp" },
                 "REF:default.things[0]"
-            ]
+            ],
+            "INHERIT:sp:default.sp": {
+                "connection": {
+                    "host": "10.10.10.10",
+                    "port": 40
+                }
+            }
         }
     }
-
+        
 Example `app.js`:
 
     var config = require( 'env-friendly-config' )( './config.json' );
@@ -32,29 +44,42 @@ Example run:
 Example output:
 
     {
-      "default": {
-        "logger": {
-          "level": "debug"
+        "default": {
+            "logger": {
+                "level": "debug"
+            },
+            "things": [
+                {
+                    "foo": "PEEB"
+                }
+            ],
+            "sp": {
+                "type": "memory",
+                "connection": {
+                    "host": "localhost"
+                }
+            }
         },
-        "things": [
-          {
-            "foo": "PEEB"
-          }
-        ]
-      },
-      "staging": {
-        "logger": {
-          "level": "debug"
-        },
-        "things": [
-          {
-            "foop": "barp"
-          },
-          {
-            "foo": "PEEB"
-          }
-        ]
-      }
+        "staging": {
+            "logger": {
+                "level": "debug"
+            },
+            "things": [
+                {
+                    "foop": "barp"
+                },
+                {
+                    "foo": "PEEB"
+                }
+            ],
+            "sp": {
+                "type": "memory",
+                "connection": {
+                    "host": "10.10.10.10",
+                    "port": 40
+                }
+            }
+        }
     }
-
+    
 enuf said.

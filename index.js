@@ -7,9 +7,11 @@ module.exports = function( filename ) {
     }
     function resolveEnv( val ) {
 	if ( ! val ) return val;
-	if ( ! val.match( /^ENV:/ ) ) return val;
-	var envvar = val.split(':')[1];
-	var defvar = val.split(':')[2];
+	if ( ! val.toString().match( /^ENV:/ ) ) return val;
+	var parts = val.split(':');
+	parts.shift();
+	var envvar = parts.shift();
+	var defvar = parts.join('');
 	var v = ( process.env[ envvar ] || defvar );
 	if ( v.match( /^\d+$/ ) ) v = Number( v );
 	else if ( v == 'true' ) v = true;
@@ -18,7 +20,7 @@ module.exports = function( filename ) {
 	return v;
     }
     function resolveRef( val ) {
-	if ( ! val.match( /^REF:/ ) ) return val;
+	if ( ! val.toString().match( /^REF:/ ) ) return val;
 	var path = val.split(':')[1];
 	return _.get( json, path );
     }
@@ -48,7 +50,28 @@ module.exports = function( filename ) {
 	    }
 	});
     }
+    function inherit( o ) {
+	_.forIn( o, function( v, k ) {
+	    if ( v instanceof Array ) {
+		// do not mess with arrays
+	    }
+	    else if ( v instanceof Object ) {
+		if ( k.match(/^INHERIT:/) ) {
+		    var keyname = k.split(':')[1];
+		    var path = k.split(':')[2];
+		    var val = _.cloneDeep( _.get( json, path ) );
+		    var newval = _.merge( val, v );
+		    o[ keyname ] = newval;
+		    delete o[ k ];
+		}
+		else {
+		    inherit( v );
+		}
+	    }
+	});
+    }
     walk( json, resolveEnv );
     walk( json, resolveRef );
+    inherit( json );
     return json;
 };

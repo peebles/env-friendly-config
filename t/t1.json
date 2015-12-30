@@ -5,13 +5,25 @@
 	},
 	"things": [
 	    { "foo": "ENV:X_FOO:bar" }
-	]
+	],
+	"sp": {
+	    "type": "memory",
+	    "connection": {
+		"host": "localhost"
+	    }
+	}
     },
     "staging": {
 	"logger": "REF:default.logger",
 	"things": [
 	    { "foop": "barp" },
 	    "REF:default.things[0]"
-	]
+	],
+	"INHERIT:sp:default.sp": {
+	    "connection": {
+		"host": "10.10.10.10",
+		"port": 40
+	    }
+	}
     }
 }
