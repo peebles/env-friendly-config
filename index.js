@@ -1,7 +1,7 @@
 var _ = require( 'lodash' );
 module.exports = function( filename ) {
     try {
-	var json = require( filename );
+	var originalJson = require( filename );
     } catch( err ) {
 	return err;
     }
@@ -78,6 +78,7 @@ module.exports = function( filename ) {
 	    }
 	});
     }
+    var json = _.cloneDeep( originalJson );
     walk( json, [], resolveEnv );
     walk( json, [], resolveRef );
     inherit( json );
