@@ -1,6 +1,6 @@
 {
   "name": "env-friendly-config",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Environment Friendly Config Files",
   "main": "index.js",
   "scripts": {
