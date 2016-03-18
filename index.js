@@ -11,7 +11,7 @@ module.exports = function( filename ) {
 	var parts = val.split(':');
 	parts.shift();
 	var envvar = parts.shift();
-	var defvar = parts.join('');
+	var defvar = parts.join(':');
 	var v = ( process.env[ envvar ] || defvar );
 	if ( v.match( /^\d+$/ ) ) v = Number( v );
 	else if ( v == 'true' ) v = true;
