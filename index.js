@@ -1,9 +1,14 @@
 var _ = require( 'lodash' );
 module.exports = function( filename ) {
-    try {
-	var originalJson = require( filename );
-    } catch( err ) {
-	return err;
+    if ( filename instanceof Object ) {
+      var originalJson = filename;
+    }
+    else {
+        try {
+	    var originalJson = require( filename );
+        } catch( err ) {
+	    return err;
+        }
     }
     function resolveEnv( val ) {
 	if ( ! val ) return val;
