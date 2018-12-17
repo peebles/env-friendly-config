@@ -21,7 +21,8 @@
 	"redis": {
 	    "host": "aws:redis"
 	},
-	"logger": "REF:default.logger",
+        "logger": "REF:default.logger",
+        "backendUrl": "http://DOCKER_HOST:8080/ep",
 	"things": [
 	    { "foop": "barp" },
 	    "REF:default.things[0]"
