@@ -83,3 +83,22 @@ Example output:
     }
     
 enuf said.
+
+**Although ...**
+
+At the same level in the directory tree as your "config.json", you may have a number of ".env.*" files that will be
+parsed first into `process.env` so they are visible in "ENV:..." statements.  This is to support keeping .env files
+out of revision control and keeping secrets in these .env files (which can then be used in docker-compose files, etc).
+First ".env.common" is looked for and if found, sourced.  Then ".env.<NODE_ENV>" is looked for and sourced if found.
+The format of these files are compatible with the .env_file format dictated by docker-compose.  Blank lines and lines
+that begin with '#' are tolerated.  Example:
+
+    # My AWS account
+    aws.accessKeyId=123456789
+    aws.secretAccessKey=xxxyyyzzz
+    
+    # My database creds
+    database.auth.user=andrew
+    database.auth.pass=secret
+    
+You can then refer to "ENV:aws.accessKeyId" in your config.json.
