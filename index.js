@@ -37,8 +37,18 @@ module.exports = function( filename ) {
     }
   }
 
+  function resolveDockerHost() {
+    var dh = 'localhost';
+    if ( process.env.DOCKER_HOST ) {
+      dh = process.env.DOCKER_HOST;
+      dh = dh.replace( /^[^:.]+:\/\//, '').replace(/:.+/, '');
+    }
+    return dh;
+  }
+
   function resolveEnv( val ) {
     if ( ! val ) return val;
+    if ( val.toString().match(/DOCKER_HOST/) ) val = val.replace('DOCKER_HOST',resolveDockerHost() );
     if ( ! val.toString().match( /^ENV:/ ) ) return val;
     var parts = val.split(':');
     parts.shift();
